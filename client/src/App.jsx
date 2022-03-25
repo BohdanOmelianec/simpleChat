@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Messagefield from './components/MessageField';
 import Usersfield from './components/UsersField';
 import Login from './components/Login';
 import './App.scss';
 import socket from './socket';
 import axios from 'axios';
+import Layout from './components/Layout';
 
 
 
@@ -15,24 +16,11 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [usersList, setUsers] = useState([]);
 
-  const loginHandler = async (userName) => {
-    socket.emit('USER:CONNECT', userName)
-}
+  const notification = useRef();
 
   const messageHandler = (messageData) => {
     setMessages(messageData)
-    console.log('messages')
-  }
-
-  const sendMessage = (message, file) => {
-
-    const time = `${new Date().getHours()}:${new Date().getMinutes()}`
-    socket.emit('USER:MESSAGE', {
-      ...currentUser,
-      message,
-      file,
-      time
-    })
+    console.log('message')
   }
 
   useEffect(() => {
@@ -53,6 +41,10 @@ function App() {
   
     socket.on('USER:MESSAGE', messageHandler);
 
+    socket.on('MESSAGE:NOTIFICATION', () => {
+      setTimeout(() => notification.current.play(), 100);
+    });
+
     socket.on('USER:DISCONNECTED', (users) => {
       console.log('Disconnected!')
       setUsers(users);
@@ -64,11 +56,16 @@ function App() {
   return (
     <div className="wrapper">
       {isLogged ? 
-        <div className="chat_container">
-          <Usersfield users={usersList} />
-          <Messagefield messages={messages} sendMessage={sendMessage} currentUser={currentUser} />
-        </div> :
-        <Login loginHandler={loginHandler} />
+        <Layout>
+          <div className="chat_container">
+            <Usersfield users={usersList} currentUser={currentUser} />
+            <Messagefield messages={messages} currentUser={currentUser} />
+            <audio ref={notification}>
+              <source src="message.mp3" type="audio/mpeg"/>
+            </audio>
+          </div>
+        </Layout> :
+        <Login  />
       }
     </div>
   )

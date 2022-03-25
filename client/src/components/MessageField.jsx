@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import socket from "../socket";
 
-
-const Messagefield = ({ messages, sendMessage, currentUser }) => {
+const Messagefield = ({ messages, currentUser }) => {
   const [inpValue, setInputValue] = useState("");
   const fieldRef = useRef();
-
+  
   useEffect(() => {
     fieldRef.current.scrollTo({
       top: fieldRef.current.scrollHeight,
@@ -18,16 +18,16 @@ const Messagefield = ({ messages, sendMessage, currentUser }) => {
 
   const sendHandler = (e) => {
     e.preventDefault();
-    sendMessage(inpValue);
+
+    const time = `${new Date().getHours()}:${new Date().getMinutes()}`
+    socket.emit('USER:MESSAGE', {
+      ...currentUser,
+      message: inpValue.trim(),
+      time
+    })
+
     setInputValue("");
   };
-
-  const preventEnter = (e) => {
-    if(e.keyCode === 13) {
-      e.preventDefault()
-      //
-    }
-  }
 
 
   return (
@@ -52,7 +52,7 @@ const Messagefield = ({ messages, sendMessage, currentUser }) => {
                     {message.time}
                   </span>
                 </div>
-                <p className={`msg_data_text ${isYou ? 'flex-end' : '' }`}>
+                <p className={`msg_data_text ${isYou ? 'flex-end-color' : '' }`}>
                   {message.message}
                 </p>
               </div>
@@ -66,9 +66,8 @@ const Messagefield = ({ messages, sendMessage, currentUser }) => {
           className="msg_input"
           value={inpValue}
           onChange={inputHandler}
-          onKeyDown={preventEnter}
         />
-        <button className={`msg_button ${inpValue ? 'msg_button_show' : ''}`} type="submit"  >
+        <button className={`msg_button ${inpValue.trim() ? 'msg_button_show' : ''}`} type="submit" disabled={!inpValue.trim()} >
           <i className="material-icons msg_button_icon">
             send
           </i>

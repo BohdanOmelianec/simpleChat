@@ -16,13 +16,16 @@ const PORT = process.env.PORT || 9000;
 let chat = new Map();
 chat.set('users', new Map()).set('messages', [])
 
-// app.post('/auth', (req, res) => {
-//     if(!chat.has('users')) {
-//         // chat.set('users', new Map())
-//         chat.set('messages', [])
-//     }
-//     res.send();
-// })
+app.post('/auth', (req, res) => {
+    const {userName} = req.body
+    for(const user of chat.get('users').values()) {
+        if(user === userName) {
+            res.send(false)
+            return;
+        } 
+    }
+    res.send(true);
+})
 
 app.get('/messages', (req, res) => {
     const messages = chat.get('messages')
@@ -50,6 +53,7 @@ io.on("connection", (socket) => {
         chat.get('messages').push(messageData)
         const newMessage = chat.get('messages')
         io.emit('USER:MESSAGE', newMessage)
+        socket.broadcast.emit('MESSAGE:NOTIFICATION')
     })
 
     socket.on('disconnect', (reason) => {
