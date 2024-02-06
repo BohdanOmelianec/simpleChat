@@ -1,3 +1,5 @@
+@use "./variables" as vars;
+
 * {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     box-sizing: border-box;
@@ -5,284 +7,32 @@
     padding: 0;
 }
 
-$btn_color: rgb(130, 248, 183);
-$gradient: linear-gradient(180deg, rgba(211,255,231,1) 0%, rgba(240,255,246,.9) 40%, rgba(255,255,255,1) 100%);
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: vars.$lightGray;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
-.wrapper {
-    min-width: 400px;
+body {
+    background: vars.$dark;
+}
+
+.main_container {
     width: 100%;
     height: 100vh;
-    // background: $gradient;
-    display: flex;
-    flex-direction: column;
-}
-
-.login_container {
-    width: 300px;
-    border: 1px solid rgb(130, 248, 183);
-    border-radius: 10px;
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: box-shadow .2s linear;
-    &:hover {
-        box-shadow: 3px 3px 7px 1px rgb(226, 226, 226);
-    }
-    &_err {
-        color:rgb(243, 63, 63);
-        font-size: 10px;
-        align-self: center;
-        margin-bottom: 2px;
-    }
-    &_input {
-        width: 100%;
-        margin-bottom: 15px;
-        border-radius: 100px;
-        border: 1px solid rgb(130, 248, 183);
-        outline: none;
-        padding: 8px 15px;
-        font-size: 18px;
-        letter-spacing: 1px;
-        color:rgb(104, 104, 104);
-        &:focus {
-            box-shadow: 0 0 3px 1px rgba(130, 248, 183, 0.658);
-        }
-    }
-    &_btn {
-        width: 100%;
-        background-color: $btn_color;
-        color:#fff;
-        padding: 8px 15px;
-        font-size: 18px;
-        border-radius: 100px;
-        border: none;
-        cursor: pointer;
-        &:hover {
-            background-color:rgb(125, 241, 177);
-        }
-    }
-
-    .input-error {
-        border: 1px solid rgb(243, 63, 63);
-        box-shadow: none;
-    }
-}
-
-@media screen and (max-width: 500px) {
-    .login_container {
-        width: 80%;
-    }
-}
-
-.chat_container {
-    width: 100%;
-    height: 100%;
     position: relative;
-    display: flex;
-    overflow: hidden;
-}
-
-.msg_container {
-    width: 100%;
-    height: auto;
-    background-color: #f6f9ff;
-    border-radius: 20px;
-    margin: 10px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.msg_section {
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.msg_item {
-    display: flex;
-    max-width: 70%;
-    margin: 10px 15px;
-}
-
-.msg_data {
-    font-size: 16px;
-    color:rgb(104, 104, 104);
-    display: flex;
-    flex-direction: column;
-
-    &_header {
-        display: flex;
-        padding: 0 10px;
-    }
-
-    &_name, &_time {
-        display: block;
-        font-size: 10px;
-        letter-spacing: 0.1em;
-        font-style: italic;
-    }
-
-    &_name {
-        color:rgb(61, 61, 61);
-        font-weight: 700;
-    }
-    
-    &_time {
-        margin-left: 15px;
-        color:rgb(185, 185, 185);
-        font-weight: 500;
-    }
-
-    &_text {
-        width: fit-content;
-        background-color:rgb(255, 255, 255);
-        border-radius: 10px;
-        box-shadow: 0px 2px 5px -2px rgba(160, 160, 160, 0.5);
-        padding: 10px;
-        margin-top: 5px;
-        overflow-wrap: break-word;
-        white-space: pre-wrap;
-    }
-}
-
-.flex-end {
-    align-self: flex-end;
-}
-.flex-end-color {
-    align-self: flex-end;
-    background-color:#00a36d;
-    color:rgb(250, 250, 250);
-}
-
-.send_section {
-    position: relative;
-    bottom: 0;
-    margin: 10px;
-    display: flex;
-    justify-content: space-around;
-}
-
-.msg_input {
-    background-color: rgb(255, 255, 255);
-    width: 100%;
-    margin-right: 10px;
-    border-radius: 15px;
-    border: 1px solid rgb(231, 233, 232);
-    outline: none;
-    padding: 0 15px;
-    font-size: 16px;
-    letter-spacing: 1px;
-    color:rgb(104, 104, 104);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-}
-
-.msg_button {
-    background-color: $btn_color;
-    color:rgb(255, 255, 255);
-    min-width: 35px;
-    height: 35px;
-    border-radius: 100px;
-    border: none;
-    cursor: pointer;
-    margin-right: -45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: margin-right .3s ease-in;
-    &_icon {
-        font-size: 22px;
-    }
-    &_show {
-        margin-right: 0;
-    }
-}
-
-//Users
-
-.users_container {
-    width: 250px;
-    height: 100%;
-    margin: 10px;
-    background-color: rgb(255, 255, 255);
-    color:rgb(80, 80, 80);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    transition: all .4s ease-in;
-
-    &_btn {
-        background-color: $btn_color;
-        color:rgb(255, 255, 255);
-        width: 25px;
-        height: 25px;
-        border-radius: 10px;
-        cursor: pointer;
-        position: absolute;
-        top: 5px;
-        right: -30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1;
-    }
-    
-    &_horizontal {
-        height: 2px;
-        border: none;;
-        background-color:rgba(211,255,231,1);
-    }
-
-    &_online {
-        margin-bottom: 10px;
-        font-weight: bold;
-        font-size: 14px;
-    }
-}
-
-.user_info {
-    position: relative;
-    display: flex;
-    padding: 5px 10px;
-    margin: 3px 0;
-    border-radius: 10px;
-    cursor: pointer;
-
-    &_logo {
-        height: 50px;
-        width: 50px;
-        margin-right: 7px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(180deg, rgba(34,193,195,1) 0%, rgb(169, 252, 136) 100%);
-        color: rgb(255, 255, 255);
-        font-size: 28px;
-        border: 1px solid $btn_color;
-        border-radius: 100%;
-    }
-    &_name {
-        display: flex;
-        align-items: center;
-        
-    }
-}
-
-.hide-users {
-    margin-left: -250px;
-}
-
-.active-user {
-    background-color:#f6f9ff;
-    font-weight: 700;
 }
